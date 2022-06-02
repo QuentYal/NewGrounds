@@ -10,6 +10,7 @@ public class PlayerMovement : MonoBehaviour
     public float walkSpeed;
     public float sprintSpeed;
     public float slideSpeed;
+    public float dashSpeed;
 
     private float desiredMoveSpeed;
     private float lastDesiredMoveSpeed;
@@ -59,10 +60,12 @@ public class PlayerMovement : MonoBehaviour
         sprinting,
         crouching,
         sliding,
+        dashing,
         air
     }
 
     public bool sliding;
+    public bool dashing;
 
     // Start is called before the first frame update
     void Start()
@@ -128,17 +131,17 @@ public class PlayerMovement : MonoBehaviour
     private void StateHandler()
     {
         // mode -sliding
-        if (sliding)
+        if (grounded && sliding)
         {
             state = MovementState.sliding;
 
             if(Onslope() && rb.velocity.y < 0.1f)
             {
-                desiredMoveSpeed = sprintSpeed;
+                desiredMoveSpeed = slideSpeed;
             }
             else
             {
-                desiredMoveSpeed = sprintSpeed;
+                desiredMoveSpeed = slideSpeed;
             }
         }
         //mode -crouching
@@ -153,6 +156,12 @@ public class PlayerMovement : MonoBehaviour
         {
             state = MovementState.sprinting;
             desiredMoveSpeed = sprintSpeed;
+        }
+
+        else if (!grounded && dashing)
+        {
+            state = MovementState.dashing;
+            desiredMoveSpeed = dashSpeed;
         }
 
         //walking
@@ -261,6 +270,8 @@ public class PlayerMovement : MonoBehaviour
 
     private IEnumerator SmoothlyLerpMoveSpeed()
     {
+        moveSpeed = desiredMoveSpeed;
+
         float time = 0;
         float difference = Mathf.Abs(desiredMoveSpeed - moveSpeed);
         float startValue = moveSpeed;
@@ -272,6 +283,6 @@ public class PlayerMovement : MonoBehaviour
             yield return null;
         }
 
-        moveSpeed = desiredMoveSpeed;
+        
     }
 }
