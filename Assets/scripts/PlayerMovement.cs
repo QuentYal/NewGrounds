@@ -158,6 +158,7 @@ public class PlayerMovement : MonoBehaviour
             desiredMoveSpeed = sprintSpeed;
         }
 
+        // dashing
         else if (!grounded && dashing)
         {
             state = MovementState.dashing;

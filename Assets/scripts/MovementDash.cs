@@ -14,6 +14,7 @@ public class MovementDash : MonoBehaviour
     public float maxDashTime;
     public float dashForce;
     private float dashTimer;
+    public float dashDistance;
 
     [Header("Input")]
     public KeyCode dashKey = KeyCode.E;
@@ -51,7 +52,7 @@ public class MovementDash : MonoBehaviour
 
         pm.dashing = true;
 
-        rb.AddForce(inputDirection * -20f * 20f, ForceMode.Impulse);
+        rb.AddForce(inputDirection * dashDistance * dashDistance, ForceMode.Impulse);
 
         dashTimer = maxDashTime;
     }
